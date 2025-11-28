@@ -1,0 +1,4 @@
+vllm
+datasets
+torch
+rich
