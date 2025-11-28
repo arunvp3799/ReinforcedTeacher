@@ -9,6 +9,7 @@ import os
 import json
 import csv
 import re
+import sys
 from rich.console import Console
 from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn
 
@@ -464,7 +465,10 @@ if __name__ == "__main__":
         }
         model = initialize_model(args.model_name, model_config)
 
-        params = json.load(open("config.json"))[args.data]
+        ROOT = os.path.dirname(os.path.abspath(__file__))
+        CONFIG_PATH = os.path.join(ROOT, "config.json")
+
+        params = json.load(open(CONFIG_PATH))[args.data]
 
         sampling_params = SamplingParams(
             temperature=params["temperature"],
