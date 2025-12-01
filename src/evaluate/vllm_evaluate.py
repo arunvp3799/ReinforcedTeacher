@@ -142,9 +142,36 @@ Only include the function implementation inside the <code></code> tags, nothing 
 
 
 def load_data_mbpp(dataset_path: str, version: str = "sanitized", num_workers: Optional[int] = None) -> Dict:
-    console.print(f"Loading dataset: {dataset_path} (version={version})")
+    console.print(f"Loading dataset from local path: {dataset_path} (version={version})")
 
-    dataset = load_dataset(dataset_path, version, split="test")
+    # Load from local file instead of HuggingFace
+    if version == "sanitized":
+        local_file = os.path.join(dataset_path, "sanitized-mbpp.json")
+    else:
+        local_file = os.path.join(dataset_path, "mbpp.jsonl")
+
+    console.print(f"Loading from local file: {local_file}")
+
+    # Load the data
+    dataset = []
+    if local_file.endswith('.jsonl'):
+        with open(local_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip():
+                    dataset.append(json.loads(line))
+    else:  # JSON file
+        with open(local_file, 'r', encoding='utf-8') as f:
+            dataset = json.load(f)
+
+    # Normalize field names - sanitized version uses 'prompt' instead of 'text'
+    for item in dataset:
+        if 'prompt' in item and 'text' not in item:
+            item['text'] = item['prompt']
+        # Ensure test_setup_code exists
+        if 'test_setup_code' not in item:
+            item['test_setup_code'] = ""
+
+    console.print(f"Loaded {len(dataset)} samples from local file")
 
     system_prompt = """You are an expert Python programmer. You will be given a task description, and you need to write a Python function to solve it.
 
@@ -483,8 +510,11 @@ if __name__ == "__main__":
             results = batch_inference_humaneval(model, data, args.batch_size, sampling_params)
             save_results_humaneval(results, args.output_folder, args.model_name)
         else:
-            dataset_name = "Muennighoff/mbpp"
-            data = load_data_mbpp(dataset_name, version=args.version, num_workers=args.num_workers)
+            # Use local data path for MBPP
+            # ROOT is src/evaluate, so we need to go up two levels to get to project root
+            data_folder = os.path.join(os.path.dirname(os.path.dirname(ROOT)), "data")
+            console.print(f"Using local data folder: {data_folder}")
+            data = load_data_mbpp(data_folder, version=args.version, num_workers=args.num_workers)
             results = batch_inference_mbpp(model, data, args.batch_size, sampling_params)
             save_results_mbpp(results, args.output_folder, args.model_name)
 

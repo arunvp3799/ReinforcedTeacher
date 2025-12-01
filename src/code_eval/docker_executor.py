@@ -91,8 +91,7 @@ class DockerExecutor:
                     "--rm",
                     "--network", "none",  # Disable network access
                     "--memory", self.memory_limit,
-                    "--cpu-quota", str(self.cpu_quota),
-                    "--cpus", "1",
+                    "--cpus", "0.5",  # Use 50% of one CPU core
                     "-v", f"{temp_file}:/sandbox/code.py:ro",  # Mount as read-only
                     "--security-opt", "no-new-privileges",
                     "--cap-drop", "ALL",  # Drop all capabilities
@@ -149,6 +148,7 @@ class DockerExecutor:
         prompt: str,
         completion: str,
         test: str,
+        entry_point: str = "",
         timeout: Optional[float] = None,
     ) -> Dict[str, Any]:
         """
@@ -159,13 +159,18 @@ class DockerExecutor:
             prompt: The problem prompt/signature
             completion: The LLM-generated solution
             test: Test cases to verify the solution
+            entry_point: Function name to test (for setting candidate)
             timeout: Override default timeout
 
         Returns:
             Dict with execution results including task_id
         """
         # Construct the full program
-        program = f"{prompt}\n{completion}\n\n{test}\n\ncheck(candidate)"
+        # Set candidate to the entry_point function
+        if entry_point:
+            program = f"{prompt}\n{completion}\n\n{test}\n\ncandidate = {entry_point}\ncheck(candidate)"
+        else:
+            program = f"{prompt}\n{completion}\n\n{test}\n\ncheck(candidate)"
 
         # Execute the program
         result = self.execute_code(program, timeout)

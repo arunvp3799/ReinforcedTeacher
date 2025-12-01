@@ -80,12 +80,12 @@ def evaluate_single_solution(args: tuple) -> Dict[str, Any]:
     Evaluate a single solution (for parallel processing).
 
     Args:
-        args: Tuple of (task_id, prompt, completion, test, timeout)
+        args: Tuple of (task_id, prompt, completion, test, entry_point, timeout)
 
     Returns:
         Evaluation result dictionary
     """
-    task_id, prompt, completion, test, timeout = args
+    task_id, prompt, completion, test, entry_point, timeout = args
 
     executor = DockerExecutor(timeout=timeout)
 
@@ -105,6 +105,7 @@ def evaluate_single_solution(args: tuple) -> Dict[str, Any]:
         prompt="",  # Empty since we include it in completion
         completion=full_code,
         test=test,
+        entry_point=entry_point,
         timeout=timeout,
     )
 
@@ -148,6 +149,7 @@ def evaluate_results(
         prompt = problem.get('prompt', '')
         completion = problem.get('completion', '')
         test = problem.get('test', '')
+        entry_point = problem.get('entry_point', '')
 
         if not task_id:
             print(f"Warning: Skipping problem without task_id")
@@ -161,7 +163,7 @@ def evaluate_results(
             print(f"Warning: No completion found for {task_id}, skipping")
             continue
 
-        tasks.append((task_id, prompt, completion, test, timeout))
+        tasks.append((task_id, prompt, completion, test, entry_point, timeout))
 
     # Evaluate in parallel
     print(f"\nEvaluating {len(tasks)} solutions using {n_workers} workers...")
