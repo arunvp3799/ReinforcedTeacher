@@ -167,6 +167,7 @@ class DockerExecutor:
         """
         # Construct the full program
         # Set candidate to the entry_point function
+        ## If human eval do the below, for mbpp use a diff format
         if entry_point:
             program = f"{prompt}\n{completion}\n\n{test}\n\ncandidate = {entry_point}\ncheck(candidate)"
         else:
