@@ -307,8 +307,8 @@ def compute_score(
     alpha: float = 0.1,  # Weight for min logprob term
     length_penalty_threshold: int = 10,  # Minimum hint length
     max_hint_length: int = 512,  # Maximum hint length in chars
-    solution_copy_penalty: float = -5.0,  # Penalty for copying solution
-    empty_hint_penalty: float = -10.0,  # Penalty for empty hints
+    solution_copy_penalty: float = 0.0,  # Penalty for copying solution (now in [0,1])
+    empty_hint_penalty: float = 0.0,  # Penalty for empty hints (now in [0,1])
     log_every_n: int = 10,  # Print debug info every N samples
 ) -> float:
     """
@@ -405,11 +405,23 @@ def compute_score(
 
         # RLT-style reward: mean + alpha * min
         # This ensures no token is completely unexplained
-        reward = logprob_stats["mean_logprob"] + alpha * logprob_stats["min_logprob"]
+        raw_reward = logprob_stats["mean_logprob"] + alpha * logprob_stats["min_logprob"]
 
-        # Normalize to reasonable range (log probs are typically negative)
-        # Scale to make rewards more interpretable
-        reward = reward / 10.0  # Rough scaling
+        # Normalize to [0, 1] range using exponential transformation
+        # Log probs are typically in [-10, 0] range, with better hints closer to 0
+        # exp(logprob) gives probability in (0, 1]
+        # We use a scaled version to make the range more usable
+        # Formula: reward = exp(raw_reward / temperature)
+        # With temperature=3, this maps roughly:
+        #   raw_reward = 0    -> reward ≈ 1.0 (perfect)
+        #   raw_reward = -3   -> reward ≈ 0.37
+        #   raw_reward = -6   -> reward ≈ 0.14
+        #   raw_reward = -10  -> reward ≈ 0.04
+        temperature = 3.0
+        reward = np.exp(raw_reward / temperature)
+
+        # Clamp to [0, 1] just to be safe
+        reward = float(np.clip(reward, 0.0, 1.0))
 
         if verbose:
             _print_separator("REWARD CALCULATION")
@@ -417,8 +429,9 @@ def compute_score(
             print(f"  - mean_logprob: {logprob_stats['mean_logprob']:.4f}")
             print(f"  - min_logprob:  {logprob_stats['min_logprob']:.4f}")
             print(f"  - num_tokens:   {logprob_stats['num_tokens']}")
-            print(f"\n[Reward Formula]: (mean + {alpha} * min) / 10")
-            print(f"[FINAL REWARD]: {reward:.4f}")
+            print(f"\n[Reward Formula]: exp((mean + {alpha} * min) / {temperature})")
+            print(f"  - raw_reward: {raw_reward:.4f}")
+            print(f"[FINAL REWARD]: {reward:.4f} (in [0, 1])")
             print("=" * 80 + "\n")
 
     except Exception as e:

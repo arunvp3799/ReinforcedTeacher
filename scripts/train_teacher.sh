@@ -119,6 +119,8 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.top_p=0.9 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.rollout.load_format=safetensors \
+    +actor_rollout_ref.rollout.agent.num_workers=1 \
+    +reward_model.num_workers=1 \
     \
     custom_reward_function.path="${PROJECT_DIR}/src/rewards/rlt_reward.py" \
     custom_reward_function.name=compute_score \
@@ -127,8 +129,8 @@ python3 -m verl.trainer.main_ppo \
     +custom_reward_function.reward_kwargs.alpha=0.1 \
     +custom_reward_function.reward_kwargs.length_penalty_threshold=10 \
     +custom_reward_function.reward_kwargs.max_hint_length=512 \
-    +custom_reward_function.reward_kwargs.solution_copy_penalty=-5.0 \
-    +custom_reward_function.reward_kwargs.empty_hint_penalty=-10.0 \
+    +custom_reward_function.reward_kwargs.solution_copy_penalty=0.0 \
+    +custom_reward_function.reward_kwargs.empty_hint_penalty=0.0 \
     +custom_reward_function.reward_kwargs.log_every_n=10 \
     \
     algorithm.use_kl_in_reward=False \
