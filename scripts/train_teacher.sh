@@ -119,8 +119,8 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.top_p=0.9 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.rollout.load_format=safetensors \
-    +actor_rollout_ref.rollout.agent.num_workers=1 \
-    +reward_model.num_workers=1 \
+    ++actor_rollout_ref.rollout.agent.num_workers=1 \
+    ++reward_model.num_workers=1 \
     \
     custom_reward_function.path="${PROJECT_DIR}/src/rewards/rlt_reward.py" \
     custom_reward_function.name=compute_score \
