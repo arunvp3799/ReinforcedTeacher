@@ -123,7 +123,7 @@ python3 -m verl.trainer.main_ppo \
     custom_reward_function.path="${PROJECT_DIR}/src/rewards/rlt_reward.py" \
     custom_reward_function.name=compute_score \
     +custom_reward_function.reward_kwargs.student_model_name="Qwen/Qwen2.5-Coder-3B-Instruct" \
-    +custom_reward_function.reward_kwargs.student_device="cuda:1" \
+    +custom_reward_function.reward_kwargs.student_device="auto" \
     +custom_reward_function.reward_kwargs.alpha=0.1 \
     +custom_reward_function.reward_kwargs.length_penalty_threshold=10 \
     +custom_reward_function.reward_kwargs.max_hint_length=512 \
@@ -134,7 +134,7 @@ python3 -m verl.trainer.main_ppo \
     algorithm.use_kl_in_reward=False \
     algorithm.norm_adv_by_std_in_grpo=True \
     \
-    trainer.n_gpus_per_node=1 \
+    trainer.n_gpus_per_node=2 \
     trainer.nnodes=1 \
     trainer.total_epochs=10 \
     trainer.save_freq=100 \

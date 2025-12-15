@@ -43,6 +43,53 @@ def _truncate_for_display(text: str, max_len: int = 500) -> str:
     return text[:max_len] + f"\n... [truncated, total {len(text)} chars]"
 
 
+def _get_available_device(preferred_device: str = "auto") -> str:
+    """
+    Get the best available device for the student model.
+    Ray workers may not have GPU access, so we need to handle this gracefully.
+
+    Args:
+        preferred_device: "auto", "cpu", "cuda:0", "cuda:1", etc.
+    """
+    # Check if CUDA is available at all
+    if not torch.cuda.is_available():
+        print(f"[WARNING] CUDA not available in this process, using CPU")
+        return "cpu"
+
+    # Get the number of visible GPUs
+    num_gpus = torch.cuda.device_count()
+    print(f"[INFO] Process has access to {num_gpus} GPU(s)")
+
+    if num_gpus == 0:
+        print(f"[WARNING] No GPUs visible to this process, using CPU")
+        return "cpu"
+
+    # Handle "auto" - use first available GPU
+    if preferred_device == "auto":
+        return "cuda:0"
+
+    # Handle "cpu" explicitly
+    if preferred_device == "cpu":
+        return "cpu"
+
+    # Parse the preferred device (e.g., "cuda:1")
+    if preferred_device.startswith("cuda:"):
+        try:
+            gpu_idx = int(preferred_device.split(":")[1])
+            if gpu_idx < num_gpus:
+                return preferred_device
+            else:
+                # Fall back to last available GPU
+                fallback = f"cuda:{num_gpus - 1}"
+                print(f"[WARNING] {preferred_device} not available, using {fallback}")
+                return fallback
+        except ValueError:
+            pass
+
+    # Default to first available GPU
+    return "cuda:0"
+
+
 def _load_student_model(
     model_name: str = "Qwen/Qwen2.5-Coder-3B-Instruct",
     device: str = "cuda:1",  # Use second GPU for student
@@ -52,7 +99,10 @@ def _load_student_model(
 
     with _student_lock:
         if _student_model is None:
-            print(f"Loading student model: {model_name} on {device}")
+            # Auto-detect best available device
+            actual_device = _get_available_device(device)
+            print(f"Loading student model: {model_name} on {actual_device} (requested: {device})")
+
             _student_tokenizer = AutoTokenizer.from_pretrained(
                 model_name,
                 trust_remote_code=True,
@@ -61,15 +111,21 @@ def _load_student_model(
             if _student_tokenizer.pad_token is None:
                 _student_tokenizer.pad_token = _student_tokenizer.eos_token
 
+            # Use appropriate dtype based on device
+            if actual_device == "cpu":
+                dtype = torch.float32  # CPU doesn't support bfloat16 well
+            else:
+                dtype = torch.bfloat16
+
             _student_model = AutoModelForCausalLM.from_pretrained(
                 model_name,
-                torch_dtype=torch.bfloat16,
+                torch_dtype=dtype,
                 trust_remote_code=True,
-                device_map=device,
+                device_map=actual_device,
             )
             _student_model.eval()
-            _device = device
-            print(f"Student model loaded successfully on {device}")
+            _device = actual_device
+            print(f"Student model loaded successfully on {actual_device}")
 
     return _student_model, _student_tokenizer
 
