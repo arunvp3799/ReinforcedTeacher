@@ -47,7 +47,7 @@ actor_rollout_ref:
 
   # Teacher model configuration
   model:
-    path: Qwen/Qwen2.5-3B-Instruct
+    path: Qwen/Qwen2.5-3B
     use_remove_padding: true
     enable_gradient_checkpointing: true
 
@@ -115,7 +115,7 @@ custom_reward_function:
 
   # Reward function kwargs
   reward_kwargs:
-    student_model_name: "Qwen/Qwen2.5-Coder-3B-Instruct"
+    student_model_name: "Qwen/Qwen2.5-Coder-3B"
     student_device: "cuda:1"  # Student on second GPU
     alpha: 0.1  # Weight for min logprob term
     length_penalty_threshold: 10
