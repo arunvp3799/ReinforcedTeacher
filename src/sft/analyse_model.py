@@ -76,7 +76,7 @@ class APPSModelAnalyzer:
             List of examples with problem descriptions and solutions
         """
         print(f"\nLoading {num_examples} examples from APPS dataset ({split} split)...")
-        dataset = load_dataset("codeparrot/apps", split=split)
+        dataset = load_dataset("codeparrot/apps", split=split, trust_remote_code=True)
 
         examples = []
         for i in range(min(num_examples, len(dataset))):
