@@ -88,7 +88,7 @@ def test_apps_dataset():
     try:
         from datasets import load_dataset
         print("  Loading dataset (this may take a moment)...")
-        dataset = load_dataset("codeparrot/apps", split="train", streaming=True, trust_remote_code=True)
+        dataset = load_dataset("codeparrot/apps", split="train", trust_remote_code=True)
 
         # Get first example
         first_example = next(iter(dataset))
