@@ -79,6 +79,22 @@ class APPSModelAnalyzer:
         dataset = load_dataset("codeparrot/apps", split=split, trust_remote_code=True)
 
         examples = []
+        count = 0
+        while True:
+            example = dataset[count]
+            if count["difficulty"] == "introductory":
+                count += 1
+                examples.append({
+                    "problem_id": example.get("problem_id", i),
+                    "question": example["question"],
+                    "solutions": example.get("solutions", []),
+                    "input_output": example.get("input_output", ""),
+                    "difficulty": example.get("difficulty", "unknown"),
+                    "url": example.get("url", "")
+                })
+                if count == num_examples:
+                    break
+
         for i in range(min(num_examples, len(dataset))):
             example = dataset[i]
             examples.append({
