@@ -90,7 +90,7 @@ python3 -m verl.trainer.main_ppo \
     data.truncation='error' \
     data.shuffle=True \
     \
-    actor_rollout_ref.model.path=Qwen/Qwen2.5-3B-Instruct \
+    actor_rollout_ref.model.path=Qwen/Qwen2.5-3B \
     actor_rollout_ref.model.lora_rank=32 \
     actor_rollout_ref.model.lora_alpha=16 \
     actor_rollout_ref.model.use_remove_padding=True \
@@ -124,7 +124,7 @@ python3 -m verl.trainer.main_ppo \
     \
     custom_reward_function.path="${PROJECT_DIR}/src/rewards/rlt_reward.py" \
     custom_reward_function.name=compute_score \
-    +custom_reward_function.reward_kwargs.student_model_name="Qwen/Qwen2.5-Coder-3B-Instruct" \
+    +custom_reward_function.reward_kwargs.student_model_name="Qwen/Qwen2.5-Coder-3B" \
     +custom_reward_function.reward_kwargs.student_device="auto" \
     +custom_reward_function.reward_kwargs.alpha=0.1 \
     +custom_reward_function.reward_kwargs.length_penalty_threshold=10 \
