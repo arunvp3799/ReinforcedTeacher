@@ -75,98 +75,115 @@ class APPSModelAnalyzer:
         Returns:
             List of examples with problem descriptions and solutions
         """
-        print(f"\nLoading {num_examples} examples from APPS dataset ({split} split)...")
+        print(f"\nLoading {num_examples} introductory examples from APPS dataset ({split} split)...")
         dataset = load_dataset("codeparrot/apps", split=split, trust_remote_code=True)
 
         examples = []
         count = 0
-        y = 0
-        while True:
+
+        # Only collect introductory examples
+        while len(examples) < num_examples and count < len(dataset):
             example = dataset[count]
             if example["difficulty"] == "introductory":
-                y += 1
                 examples.append({
-                    "problem_id": example.get("problem_id", i),
+                    "problem_id": example.get("problem_id", count),
                     "question": example["question"],
                     "solutions": example.get("solutions", []),
                     "input_output": example.get("input_output", ""),
                     "difficulty": example.get("difficulty", "unknown"),
                     "url": example.get("url", "")
                 })
-                if y == num_examples:
-                    break
             count += 1
 
-        for i in range(min(num_examples, len(dataset))):
-            example = dataset[i]
-            examples.append({
-                "problem_id": example.get("problem_id", i),
-                "question": example["question"],
-                "solutions": example.get("solutions", []),
-                "input_output": example.get("input_output", ""),
-                "difficulty": example.get("difficulty", "unknown"),
-                "url": example.get("url", "")
-            })
-
-        print(f"Loaded {len(examples)} examples")
+        print(f"Loaded {len(examples)} introductory examples")
         return examples
 
-    def create_coding_prompt(self, question: str) -> str:
-        """Create a prompt for the coder model."""
-        prompt = f"""You are an expert Python programmer. Write a complete Python solution for the following problem.
+    def create_coding_prompt(self, question: str) -> List[Dict[str, str]]:
+        """Create a chat prompt for the coder model."""
+        system_prompt = """You are an expert Python programmer. Write a complete Python solution for the following problem.
 
-Problem:
-{question}
+Your solution should:
+1. Be a complete, working Python function
+2. Follow the problem description exactly
+3. Be properly indented and formatted
+4. Be efficient and clean
 
-Provide only the Python code without any explanations. The code should be ready to run.
+IMPORTANT: You must wrap your code solution in <code></code> tags. For example:
+<code>
+def your_function(x):
+    return x + 1
+</code>
 
-Solution:
-```python
-"""
-        return prompt
+Only include the code inside the <code></code> tags, nothing else."""
 
-    def create_hint_prompt(self, question: str) -> str:
-        """Create a prompt to generate hints for the problem."""
-        prompt = f"""You are a helpful programming teacher. Analyze the following coding problem and provide a clear, concise hint about the approach to solve it. Focus on the key algorithm or data structure needed.
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": question}
+        ]
+        return messages
 
-Problem:
+    def create_hint_prompt(self, question: str) -> List[Dict[str, str]]:
+        """Create a chat prompt to generate hints for the problem."""
+        system_prompt = """You are a helpful programming teacher. Analyze coding problems and provide clear, concise hints about the approach to solve them. Focus on the key algorithm or data structure needed."""
+
+        user_prompt = f"""Problem:
 {question}
 
 Provide a brief hint (2-3 sentences) about the approach:"""
-        return prompt
 
-    def create_instruct_with_hint_prompt(self, question: str, hint: str) -> str:
-        """Create a prompt for the instruct model with a hint."""
-        prompt = f"""You are an expert Python programmer. Write a complete Python solution for the following problem.
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        return messages
 
-Problem:
+    def create_instruct_with_hint_prompt(self, question: str, hint: str) -> List[Dict[str, str]]:
+        """Create a chat prompt for the instruct model with a hint."""
+        system_prompt = """You are an expert Python programmer. Write a complete Python solution for the following problem.
+
+Your solution should:
+1. Be a complete, working Python function
+2. Follow the problem description exactly
+3. Be properly indented and formatted
+4. Be efficient and clean
+
+IMPORTANT: You must wrap your code solution in <code></code> tags. For example:
+<code>
+def your_function(x):
+    return x + 1
+</code>
+
+Only include the code inside the <code></code> tags, nothing else."""
+
+        user_prompt = f"""Problem:
 {question}
 
 Hint: {hint}
 
-Provide only the Python code without any explanations. The code should be ready to run.
+Write the solution:"""
 
-Solution:
-```python
-"""
-        return prompt
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        return messages
 
     def generate_code(
         self,
         model,
         tokenizer,
-        prompt: str,
+        messages: List[Dict[str, str]],
         max_new_tokens: int = 512,
         temperature: float = 0.7,
         top_p: float = 0.95
     ) -> str:
         """
-        Generate code using the specified model.
+        Generate code using the specified model with chat format.
 
         Args:
             model: The model to use for generation
             tokenizer: The tokenizer for the model
-            prompt: The input prompt
+            messages: Chat messages in the format [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}]
             max_new_tokens: Maximum tokens to generate
             temperature: Sampling temperature
             top_p: Nucleus sampling parameter
@@ -174,6 +191,13 @@ Solution:
         Returns:
             Generated text
         """
+        # Apply chat template to convert messages to the proper format
+        prompt = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+
         inputs = tokenizer(prompt, return_tensors="pt").to(self.device)
 
         with torch.no_grad():
