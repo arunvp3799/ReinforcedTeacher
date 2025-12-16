@@ -1,0 +1,185 @@
+# RLT-Style Hint Generation Training Configuration
+# Teacher Model: Qwen2.5-3B-Instruct trained with GRPO
+# Student Model: Qwen2.5-Coder-3B-Instruct (frozen, used for reward computation)
+#
+# Hardware: 2 GPUs
+# - GPU 0: Teacher model (rollout + training)
+# - GPU 1: Student model (reward computation)
+
+# Inherit default configs
+defaults:
+  - actor@actor_rollout_ref.actor: dp_actor
+  - data@data: legacy_data
+  - ref@actor_rollout_ref.ref: dp_ref
+  - rollout@actor_rollout_ref.rollout: rollout
+  - model@actor_rollout_ref.model: hf_model
+  - critic@critic: dp_critic
+  - reward_model@reward_model: dp_reward_model
+  - algorithm@algorithm.rollout_correction: rollout_correction
+  - _self_
+
+# Data configuration
+data:
+  # Paths to training and validation data (parquet format)
+  train_files: ${oc.env:DATA_DIR}/train.parquet
+  val_files: ${oc.env:DATA_DIR}/val.parquet
+
+  # Batch configuration
+  train_batch_size: 4  # Number of prompts per batch (will generate n responses each)
+
+  # Sequence lengths
+  max_prompt_length: 1024  # Teacher prompt (question + solution) can be long
+  max_response_length: 512  # Hints should be concise
+
+  # Data processing
+  filter_overlong_prompts: true
+  truncation: 'error'
+  shuffle: true
+
+  # Keys for data loading
+  prompt_key: prompt
+  reward_fn_key: data_source
+
+# Actor/Rollout/Reference model configuration
+actor_rollout_ref:
+  hybrid_engine: true
+  nccl_timeout: 600
+
+  # Teacher model configuration
+  model:
+    path: Qwen/Qwen2.5-3B
+    use_remove_padding: true
+    enable_gradient_checkpointing: true
+
+    # LoRA configuration for efficient training
+    lora_rank: 32
+    lora_alpha: 16
+    # lora_target_modules: null  # Use default targets
+
+  # Actor (policy) training configuration
+  actor:
+    # Optimizer settings
+    optim:
+      lr: 1e-6  # Conservative learning rate
+      weight_decay: 0.01
+      lr_warmup_steps_ratio: 0.1
+
+    # PPO/GRPO settings
+    ppo_mini_batch_size: 4  # Process all samples in one mini-batch
+    ppo_micro_batch_size_per_gpu: 2  # Micro-batch per GPU for gradient accumulation
+    ppo_epochs: 1  # Number of epochs per batch
+    clip_ratio: 0.2  # PPO clip range
+
+    # KL divergence settings (for GRPO, use KL loss not reward penalty)
+    use_kl_loss: true
+    kl_loss_coef: 0.001
+    kl_loss_type: low_var_kl
+
+    # Entropy bonus
+    entropy_coeff: 0.01  # Small entropy bonus to encourage exploration
+
+    # FSDP settings for memory efficiency
+    fsdp_config:
+      param_offload: true
+      optimizer_offload: true
+
+  # Reference model configuration
+  ref:
+    log_prob_micro_batch_size_per_gpu: 4
+    fsdp_config:
+      param_offload: true
+
+  # Rollout (generation) configuration
+  rollout:
+    name: vllm  # Use vLLM for fast generation
+    tensor_model_parallel_size: 1  # No tensor parallelism needed for 3B model
+    gpu_memory_utilization: 0.4  # Reserve GPU memory for training
+
+    # GRPO requires multiple rollouts per prompt
+    n: 4  # Generate 4 hints per problem
+
+    # Generation parameters
+    temperature: 0.7  # Some diversity in hint generation
+    top_p: 0.9
+    max_new_tokens: 512
+
+    # Batch settings
+    log_prob_micro_batch_size_per_gpu: 4
+    load_format: safetensors
+
+# Custom reward function configuration
+custom_reward_function:
+  # Path to the RLT reward function
+  path: ${oc.env:PROJECT_DIR}/src/rewards/rlt_reward.py
+  name: compute_score
+
+  # Reward function kwargs
+  reward_kwargs:
+    student_model_name: "Qwen/Qwen2.5-Coder-3B"
+    student_device: "cuda:1"  # Student on second GPU
+    alpha: 0.1  # Weight for min logprob term
+    length_penalty_threshold: 10
+    max_hint_length: 512
+    solution_copy_penalty: -5.0
+    empty_hint_penalty: -10.0
+
+# Algorithm configuration
+algorithm:
+  # Use GRPO advantage estimator
+  adv_estimator: grpo
+
+  # Normalize advantages by std within each group
+  norm_adv_by_std_in_grpo: true
+
+  # Discount factor (1.0 for single-turn)
+  gamma: 1.0
+  lam: 1.0
+
+  # KL penalty settings
+  use_kl_in_reward: false  # KL handled in actor loss for GRPO
+  kl_penalty: kl
+
+  kl_ctrl:
+    type: fixed
+    kl_coef: 0.001
+    horizon: 10000
+    target_kl: 0.1
+
+# Reward model configuration (disabled - we use custom reward function)
+reward_model:
+  enable: false
+  reward_manager: naive
+
+# Critic configuration (disabled for GRPO)
+critic:
+  enable: false
+
+# Trainer configuration
+trainer:
+  # Hardware configuration for 2 GPUs
+  # GPU 0: Teacher training/rollout
+  # GPU 1: Student model for reward (loaded in reward function)
+  n_gpus_per_node: 1  # Only 1 GPU for verl, student is loaded separately
+  nnodes: 1
+  device: cuda
+
+  # Training schedule
+  total_epochs: 10
+
+  # Checkpointing
+  save_freq: 100  # Save every 100 steps
+  default_local_dir: ${oc.env:OUTPUT_DIR}/checkpoints
+
+  # Validation
+  val_before_train: false  # Skip initial validation
+  test_freq: 50  # Validate every 50 steps
+
+  # Logging
+  logger: ["console", "wandb"]
+  project_name: rlt_hint_generation
+  experiment_name: teacher_grpo_apps
+
+  # Misc
+  critic_warmup: 0  # No critic warmup for GRPO
+  balance_batch: true
+  ray_wait_register_center_timeout: 300
