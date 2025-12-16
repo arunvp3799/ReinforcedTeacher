@@ -138,8 +138,8 @@ python3 -m verl.trainer.main_ppo \
     \
     trainer.n_gpus_per_node=2 \
     trainer.nnodes=1 \
-    trainer.total_epochs=10 \
-    trainer.save_freq=100 \
+    trainer.total_epochs=2 \
+    trainer.save_freq=50 \
     trainer.test_freq=50 \
     trainer.critic_warmup=0 \
     trainer.logger='["console","wandb"]' \
