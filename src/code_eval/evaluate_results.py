@@ -24,6 +24,24 @@ from docker_executor import DockerExecutor
 from metrics import calculate_metrics, print_metrics
 
 
+def extract_function_name(code: str) -> str:
+    """
+    Extract the first function name from Python code.
+
+    Args:
+        code: Python code string
+
+    Returns:
+        Function name or empty string if not found
+    """
+    import re
+    # Match function definition: def function_name(
+    match = re.search(r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(', code)
+    if match:
+        return match.group(1)
+    return ''
+
+
 def load_results_json(json_path: str) -> List[Dict[str, Any]]:
     """
     Load results from JSON file.
@@ -100,11 +118,34 @@ def evaluate_single_solution(args: tuple) -> Dict[str, Any]:
         # Completion already includes the full function
         full_code = completion
 
+    # For MBPP (no entry_point), fix function name mismatches
+    # Extract actual function name from completion and update test to use it
+    fixed_test = test
+    if not entry_point:
+        actual_func_name = extract_function_name(completion)
+        if actual_func_name:
+            # Extract expected function name from test assertions
+            import re
+            # Find function calls in assertions: function_name(
+            expected_matches = re.findall(r'\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(', test)
+            if expected_matches:
+                # Use the most common function name (likely the one being tested)
+                from collections import Counter
+                expected_func_name = Counter(expected_matches).most_common(1)[0][0]
+
+                # Replace expected function name with actual function name in test
+                if expected_func_name != actual_func_name:
+                    fixed_test = re.sub(
+                        r'\b' + re.escape(expected_func_name) + r'\b',
+                        actual_func_name,
+                        test
+                    )
+
     result = executor.check_correctness(
         task_id=task_id,
         prompt="",  # Empty since we include it in completion
         completion=full_code,
-        test=test,
+        test=fixed_test,
         entry_point=entry_point,
         timeout=timeout,
     )
@@ -146,10 +187,29 @@ def evaluate_results(
     tasks = []
     for problem in problems:
         task_id = problem.get('task_id')
-        prompt = problem.get('prompt', '')
+
+        # Handle both HumanEval and MBPP formats
+        # HumanEval: prompt, test, entry_point
+        # MBPP: text, test_list, test_setup_code
+        if 'test_list' in problem:
+            # MBPP format
+            prompt = ''  # MBPP text is description, not code - don't use it as prompt
+            test_list = problem.get('test_list', [])
+            test_setup = problem.get('test_setup_code', '')
+
+            # Convert test_list to a single test string
+            if test_setup:
+                test = f"{test_setup}\n" + "\n".join(test_list)
+            else:
+                test = "\n".join(test_list)
+            entry_point = ''  # MBPP doesn't use entry_point
+        else:
+            # HumanEval format
+            prompt = problem.get('prompt', '')
+            test = problem.get('test', '')
+            entry_point = problem.get('entry_point', '')
+
         completion = problem.get('completion', '')
-        test = problem.get('test', '')
-        entry_point = problem.get('entry_point', '')
 
         if not task_id:
             print(f"Warning: Skipping problem without task_id")
@@ -326,6 +386,27 @@ def main():
         with open(summary_file, 'w') as f:
             json.dump(summary, f, indent=2)
         print(f"\nSummary saved to {summary_file}")
+
+    # Update model comparison file
+    input_path_obj = Path(args.input)
+    model_name = input_path_obj.stem  # e.g., "Qwen_Qwen2.5-Coder-3B-Instruct_humaneval"
+    comparison_file = input_path_obj.parent / "model_comparison.json"
+
+    # Load existing data
+    if comparison_file.exists():
+        with open(comparison_file, 'r') as f:
+            comparison_data = json.load(f)
+    else:
+        comparison_data = {}
+
+    # Add/update entry for this model
+    comparison_data[model_name] = summary
+
+    # Save updated data
+    with open(comparison_file, 'w') as f:
+        json.dump(comparison_data, f, indent=2)
+
+    print(f"\nModel comparison updated: {comparison_file}")
 
 
 if __name__ == "__main__":

@@ -79,6 +79,7 @@ class DockerExecutor:
             mode='w',
             suffix='.py',
             delete=False,
+            encoding='utf-8',
         ) as f:
             f.write(code)
             temp_file = f.name
@@ -166,12 +167,14 @@ class DockerExecutor:
             Dict with execution results including task_id
         """
         # Construct the full program
-        # Set candidate to the entry_point function
-        ## If human eval do the below, for mbpp use a diff format
+        # HumanEval: uses entry_point and check(candidate) pattern
+        # MBPP: just runs completion + test assertions directly
         if entry_point:
+            # HumanEval format
             program = f"{prompt}\n{completion}\n\n{test}\n\ncandidate = {entry_point}\ncheck(candidate)"
         else:
-            program = f"{prompt}\n{completion}\n\n{test}\n\ncheck(candidate)"
+            # MBPP format - just run completion + test
+            program = f"{completion}\n\n{test}"
 
         # Execute the program
         result = self.execute_code(program, timeout)
