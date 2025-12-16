@@ -80,10 +80,11 @@ class APPSModelAnalyzer:
 
         examples = []
         count = 0
+        y = 0
         while True:
             example = dataset[count]
-            if count["difficulty"] == "introductory":
-                count += 1
+            if example["difficulty"] == "introductory":
+                y += 1
                 examples.append({
                     "problem_id": example.get("problem_id", i),
                     "question": example["question"],
@@ -92,8 +93,9 @@ class APPSModelAnalyzer:
                     "difficulty": example.get("difficulty", "unknown"),
                     "url": example.get("url", "")
                 })
-                if count == num_examples:
+                if y == num_examples:
                     break
+            count += 1
 
         for i in range(min(num_examples, len(dataset))):
             example = dataset[i]
