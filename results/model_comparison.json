@@ -1,0 +1,37 @@
+{
+  "Qwen_Qwen2.5-Coder-3B-Instruct_humaneval": {
+    "total": 164,
+    "passed": 137,
+    "failed": 27,
+    "timed_out": 0,
+    "pass_rate": 0.8353658536585366
+  },
+  "Qwen_Qwen2.5-Coder-3B_humaneval": {
+    "total": 147,
+    "passed": 49,
+    "failed": 98,
+    "timed_out": 0,
+    "pass_rate": 0.3333333333333333
+  },
+  "Qwen_Qwen2.5-Coder-3B-Instruct_mbpp": {
+    "total": 427,
+    "passed": 240,
+    "failed": 187,
+    "timed_out": 0,
+    "pass_rate": 0.5620608899297423
+  },
+  "Qwen_Qwen3-4B_humaneval": {
+    "total": 164,
+    "passed": 32,
+    "failed": 132,
+    "timed_out": 0,
+    "pass_rate": 0.1951219512195122
+  },
+  "Qwen_Qwen2.5-Coder-3B_mbpp": {
+    "total": 399,
+    "passed": 230,
+    "failed": 169,
+    "timed_out": 0,
+    "pass_rate": 0.5764411027568922
+  }
+}
