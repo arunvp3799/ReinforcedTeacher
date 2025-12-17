@@ -17,6 +17,23 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 console = Console()
 
 
+def load_hints(hint_file: str) -> Dict[str, str]:
+    """Load hints from a JSON file and return a dict mapping task_id to hint."""
+    console.print(f"Loading hints from: {hint_file}")
+    with open(hint_file, 'r', encoding='utf-8') as f:
+        hints_data = json.load(f)
+
+    # Create mapping from task_id to hint
+    hints_map = {}
+    for item in hints_data:
+        task_id = str(item.get("task_id", ""))
+        hint = item.get("hint", "")
+        hints_map[task_id] = hint
+
+    console.print(f"Loaded {len(hints_map)} hints")
+    return hints_map
+
+
 def parse_code_output(text: str) -> str:
     code_pattern = r'<code>(.*?)</code>'
     matches = re.findall(code_pattern, text, re.DOTALL)
@@ -44,7 +61,21 @@ def initialize_model(model_name: str, config: Optional[Dict] = None):
     return model
 
 
-def process_data_item_humaneval(item: Dict, system_prompt: str) -> Dict:
+def process_data_item_humaneval(item: Dict, system_prompt: str, hint: Optional[str] = None) -> Dict:
+    # Build user content with optional hint
+    if hint:
+        user_content = f"""Solve the following problem using the provided hint.
+
+<question>
+{item["prompt"]}
+</question>
+
+<hint>
+{hint}
+</hint>"""
+    else:
+        user_content = item["prompt"]
+
     message_item = [
         {
             "role": "system",
@@ -52,7 +83,7 @@ def process_data_item_humaneval(item: Dict, system_prompt: str) -> Dict:
         },
         {
             "role": "user",
-            "content": item["prompt"]
+            "content": user_content
         }
     ]
 
@@ -62,11 +93,26 @@ def process_data_item_humaneval(item: Dict, system_prompt: str) -> Dict:
         "canonical_solution": item["canonical_solution"],
         "test": item["test"],
         "task_id": item["task_id"],
-        "entry_point": item["entry_point"]
+        "entry_point": item["entry_point"],
+        "hint": hint
     }
 
 
-def process_data_item_mbpp(item: Dict, system_prompt: str) -> Dict:
+def process_data_item_mbpp(item: Dict, system_prompt: str, hint: Optional[str] = None) -> Dict:
+    # Build user content with optional hint
+    if hint:
+        user_content = f"""Solve the following problem using the provided hint.
+
+<question>
+{item["text"]}
+</question>
+
+<hint>
+{hint}
+</hint>"""
+    else:
+        user_content = item["text"]
+
     message_item = [
         {
             "role": "system",
@@ -74,7 +120,7 @@ def process_data_item_mbpp(item: Dict, system_prompt: str) -> Dict:
         },
         {
             "role": "user",
-            "content": item["text"]
+            "content": user_content
         }
     ]
 
@@ -84,16 +130,33 @@ def process_data_item_mbpp(item: Dict, system_prompt: str) -> Dict:
         "code": item["code"],
         "test_list": item["test_list"],
         "task_id": item["task_id"],
-        "test_setup_code": item.get("test_setup_code", "")
+        "test_setup_code": item.get("test_setup_code", ""),
+        "hint": hint
     }
 
 
-def load_data_humaneval(dataset_path: str, num_workers: Optional[int] = None) -> Dict:
+def load_data_humaneval(dataset_path: str, num_workers: Optional[int] = None, hints_map: Optional[Dict[str, str]] = None) -> Dict:
     console.print(f"Loading dataset: {dataset_path}")
 
     dataset = load_dataset(dataset_path, split="test")
 
-    system_prompt = """You are an intelligent coder who can solve complex programming problems. Given a problem, you need to generate a solution for it.
+    if hints_map:
+        system_prompt = """You are an intelligent coder who can solve complex programming problems. Given a problem and a hint, you need to generate a solution for it.
+You will be given a problem in terms of a function signature and a description of the problem, along with a helpful hint. Use the hint to guide your solution.
+
+The solution should be self-contained and should not import any external libraries. It should be in `python` language.
+I should be able to add the solution string to the problem file and run it.
+
+IMPORTANT: You must wrap your code solution in <code></code> tags. For example:
+<code>
+def your_function(x):
+    return x + 1
+</code>
+
+Only include the function implementation inside the <code></code> tags, nothing else.
+"""
+    else:
+        system_prompt = """You are an intelligent coder who can solve complex programming problems. Given a problem, you need to generate a solution for it.
 You will be given a problem in terms of a function signature and a description of the problem. Solve the problem and provide a solution which is properly indented and formatted.
 
 The solution should be self-contained and should not import any external libraries. It should be in `python` language.
@@ -108,11 +171,11 @@ def your_function(x):
 Only include the function implementation inside the <code></code> tags, nothing else.
 """
 
-    if num_workers is None:
-        num_workers = min(cpu_count(), len(dataset))
+    console.print(f"Processing {len(dataset)} samples...")
+    if hints_map:
+        console.print(f"[green]Using hints for generation[/green]")
 
-    console.print(f"Processing {len(dataset)} samples with {num_workers} workers...")
-
+    processed_items = []
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
@@ -121,13 +184,11 @@ Only include the function implementation inside the <code></code> tags, nothing 
     ) as progress:
         task = progress.add_task("Processing dataset", total=len(dataset))
 
-        process_func = partial(process_data_item_humaneval, system_prompt=system_prompt)
-
-        with Pool(num_workers) as pool:
-            processed_items = []
-            for result in pool.imap(process_func, dataset, chunksize=max(1, len(dataset) // num_workers)):
-                processed_items.append(result)
-                progress.update(task, advance=1)
+        for item in dataset:
+            hint = hints_map.get(str(item["task_id"]), None) if hints_map else None
+            processed = process_data_item_humaneval(item, system_prompt, hint)
+            processed_items.append(processed)
+            progress.update(task, advance=1)
 
     data_dict = {
         "messages": [item["messages"] for item in processed_items],
@@ -135,13 +196,14 @@ Only include the function implementation inside the <code></code> tags, nothing 
         "canonical_solution": [item["canonical_solution"] for item in processed_items],
         "test": [item["test"] for item in processed_items],
         "task_id": [item["task_id"] for item in processed_items],
-        "entry_point": [item["entry_point"] for item in processed_items]
+        "entry_point": [item["entry_point"] for item in processed_items],
+        "hints": [item["hint"] for item in processed_items]
     }
 
     return data_dict
 
 
-def load_data_mbpp(dataset_path: str, version: str = "sanitized", num_workers: Optional[int] = None) -> Dict:
+def load_data_mbpp(dataset_path: str, version: str = "sanitized", num_workers: Optional[int] = None, hints_map: Optional[Dict[str, str]] = None) -> Dict:
     console.print(f"Loading dataset from local path: {dataset_path} (version={version})")
 
     # Load from local file instead of HuggingFace
@@ -173,7 +235,28 @@ def load_data_mbpp(dataset_path: str, version: str = "sanitized", num_workers: O
 
     console.print(f"Loaded {len(dataset)} samples from local file")
 
-    system_prompt = """You are an expert Python programmer. You will be given a task description, and you need to write a Python function to solve it.
+    if hints_map:
+        system_prompt = """You are an expert Python programmer. You will be given a task description and a helpful hint, and you need to write a Python function to solve it.
+Use the hint to guide your solution.
+
+Your solution should:
+1. Be a complete, working Python function
+2. Follow the task description exactly
+3. Be properly indented and formatted
+4. Use standard Python libraries when needed (you can import libraries)
+5. Be efficient and clean
+
+IMPORTANT: You must wrap your complete solution in <code></code> tags. For example:
+<code>
+def your_function(param1, param2):
+    # your implementation
+    return result
+</code>
+
+Include all necessary imports inside the <code></code> tags if needed.
+"""
+    else:
+        system_prompt = """You are an expert Python programmer. You will be given a task description, and you need to write a Python function to solve it.
 
 Your solution should:
 1. Be a complete, working Python function
@@ -192,11 +275,11 @@ def your_function(param1, param2):
 Include all necessary imports inside the <code></code> tags if needed.
 """
 
-    if num_workers is None:
-        num_workers = min(cpu_count(), len(dataset))
+    console.print(f"Processing {len(dataset)} samples...")
+    if hints_map:
+        console.print(f"[green]Using hints for generation[/green]")
 
-    console.print(f"Processing {len(dataset)} samples with {num_workers} workers...")
-
+    processed_items = []
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
@@ -205,13 +288,11 @@ Include all necessary imports inside the <code></code> tags if needed.
     ) as progress:
         task = progress.add_task("Processing dataset", total=len(dataset))
 
-        process_func = partial(process_data_item_mbpp, system_prompt=system_prompt)
-
-        with Pool(num_workers) as pool:
-            processed_items = []
-            for result in pool.imap(process_func, dataset, chunksize=max(1, len(dataset) // num_workers)):
-                processed_items.append(result)
-                progress.update(task, advance=1)
+        for item in dataset:
+            hint = hints_map.get(str(item["task_id"]), None) if hints_map else None
+            processed = process_data_item_mbpp(item, system_prompt, hint)
+            processed_items.append(processed)
+            progress.update(task, advance=1)
 
     data_dict = {
         "messages": [item["messages"] for item in processed_items],
@@ -219,7 +300,8 @@ Include all necessary imports inside the <code></code> tags if needed.
         "code": [item["code"] for item in processed_items],
         "test_list": [item["test_list"] for item in processed_items],
         "task_id": [item["task_id"] for item in processed_items],
-        "test_setup_code": [item["test_setup_code"] for item in processed_items]
+        "test_setup_code": [item["test_setup_code"] for item in processed_items],
+        "hints": [item["hint"] for item in processed_items]
     }
 
     return data_dict
@@ -233,6 +315,7 @@ def batch_inference_humaneval(
 ) -> List[Dict]:
     total_samples = len(data_dict["messages"])
     all_results = []
+    has_hints = "hints" in data_dict
 
     console.print(f"Running inference on {total_samples} samples (batch_size={batch_size})")
 
@@ -252,6 +335,7 @@ def batch_inference_humaneval(
             batch_canonical = data_dict["canonical_solution"][i:i + batch_size]
             batch_tests = data_dict["test"][i:i + batch_size]
             batch_entry_points = data_dict["entry_point"][i:i + batch_size]
+            batch_hints = data_dict["hints"][i:i + batch_size] if has_hints else [None] * len(batch_messages)
 
             current_batch_size = len(batch_messages)
 
@@ -261,18 +345,19 @@ def batch_inference_humaneval(
                     sampling_params=sampling_params,
                 )
 
-                for output, task_id, prompt, canonical, test, entry_point in zip(
+                for output, task_id, prompt, canonical, test, entry_point, hint in zip(
                     outputs,
                     batch_task_ids,
                     batch_prompts,
                     batch_canonical,
                     batch_tests,
-                    batch_entry_points
+                    batch_entry_points,
+                    batch_hints
                 ):
                     raw_output = output.outputs[0].text
                     parsed_code = parse_code_output(raw_output)
 
-                    all_results.append({
+                    result = {
                         "task_id": task_id,
                         "prompt": prompt,
                         "completion": parsed_code,
@@ -280,7 +365,10 @@ def batch_inference_humaneval(
                         "canonical_solution": canonical,
                         "test": test,
                         "entry_point": entry_point
-                    })
+                    }
+                    if hint is not None:
+                        result["hint"] = hint
+                    all_results.append(result)
 
                 progress.update(task, advance=current_batch_size)
 
@@ -291,15 +379,16 @@ def batch_inference_humaneval(
 
             except Exception as e:
                 console.print(f"[red]Error in batch {i//batch_size + 1}: {e}[/red]")
-                for task_id, prompt, canonical, test, entry_point in zip(
+                for task_id, prompt, canonical, test, entry_point, hint in zip(
                     batch_task_ids,
                     batch_prompts,
                     batch_canonical,
                     batch_tests,
-                    batch_entry_points
+                    batch_entry_points,
+                    batch_hints
                 ):
                     error_msg = f"ERROR: {str(e)}"
-                    all_results.append({
+                    result = {
                         "task_id": task_id,
                         "prompt": prompt,
                         "completion": error_msg,
@@ -307,7 +396,10 @@ def batch_inference_humaneval(
                         "canonical_solution": canonical,
                         "test": test,
                         "entry_point": entry_point
-                    })
+                    }
+                    if hint is not None:
+                        result["hint"] = hint
+                    all_results.append(result)
                 progress.update(task, advance=current_batch_size)
                 continue
 
@@ -322,6 +414,7 @@ def batch_inference_mbpp(
 ) -> List[Dict]:
     total_samples = len(data_dict["messages"])
     all_results = []
+    has_hints = "hints" in data_dict
 
     console.print(f"Running inference on {total_samples} samples (batch_size={batch_size})")
 
@@ -341,6 +434,7 @@ def batch_inference_mbpp(
             batch_code = data_dict["code"][i:i + batch_size]
             batch_test_list = data_dict["test_list"][i:i + batch_size]
             batch_test_setup = data_dict["test_setup_code"][i:i + batch_size]
+            batch_hints = data_dict["hints"][i:i + batch_size] if has_hints else [None] * len(batch_messages)
 
             current_batch_size = len(batch_messages)
 
@@ -350,18 +444,19 @@ def batch_inference_mbpp(
                     sampling_params=sampling_params,
                 )
 
-                for output, task_id, text, code, test_list, test_setup in zip(
+                for output, task_id, text, code, test_list, test_setup, hint in zip(
                     outputs,
                     batch_task_ids,
                     batch_texts,
                     batch_code,
                     batch_test_list,
-                    batch_test_setup
+                    batch_test_setup,
+                    batch_hints
                 ):
                     raw_output = output.outputs[0].text
                     parsed_code = parse_code_output(raw_output)
 
-                    all_results.append({
+                    result = {
                         "task_id": task_id,
                         "text": text,
                         "completion": parsed_code,
@@ -369,7 +464,10 @@ def batch_inference_mbpp(
                         "code": code,
                         "test_list": test_list,
                         "test_setup_code": test_setup
-                    })
+                    }
+                    if hint is not None:
+                        result["hint"] = hint
+                    all_results.append(result)
 
                 progress.update(task, advance=current_batch_size)
 
@@ -380,15 +478,16 @@ def batch_inference_mbpp(
 
             except Exception as e:
                 console.print(f"[red]Error in batch {i//batch_size + 1}: {e}[/red]")
-                for task_id, text, code, test_list, test_setup in zip(
+                for task_id, text, code, test_list, test_setup, hint in zip(
                     batch_task_ids,
                     batch_texts,
                     batch_code,
                     batch_test_list,
-                    batch_test_setup
+                    batch_test_setup,
+                    batch_hints
                 ):
                     error_msg = f"ERROR: {str(e)}"
-                    all_results.append({
+                    result = {
                         "task_id": task_id,
                         "text": text,
                         "completion": error_msg,
@@ -396,25 +495,31 @@ def batch_inference_mbpp(
                         "code": code,
                         "test_list": test_list,
                         "test_setup_code": test_setup
-                    })
+                    }
+                    if hint is not None:
+                        result["hint"] = hint
+                    all_results.append(result)
                 progress.update(task, advance=current_batch_size)
                 continue
 
     return all_results
 
 
-def save_results_humaneval(results: List[Dict], output_folder: str, model_name: str):
+def save_results_humaneval(results: List[Dict], output_folder: str, model_name: str, use_hint: bool = False):
     os.makedirs(output_folder, exist_ok=True)
 
     model_basename = model_name.replace("/", "_")
-    csv_file = f"{output_folder}/{model_basename}_humaneval.csv"
-    json_file = f"{output_folder}/{model_basename}_humaneval.json"
+    suffix = "_with_hint" if use_hint else ""
+    csv_file = f"{output_folder}/{model_basename}_humaneval{suffix}.csv"
+    json_file = f"{output_folder}/{model_basename}_humaneval{suffix}.json"
 
     with open(json_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
 
     if results:
         fieldnames = ["task_id", "prompt", "completion", "raw_completion", "canonical_solution", "test", "entry_point"]
+        if use_hint:
+            fieldnames.append("hint")
         with open(csv_file, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
@@ -423,12 +528,13 @@ def save_results_humaneval(results: List[Dict], output_folder: str, model_name: 
     console.print(f"\nResults saved to {json_file} and {csv_file}")
 
 
-def save_results_mbpp(results: List[Dict], output_folder: str, model_name: str):
+def save_results_mbpp(results: List[Dict], output_folder: str, model_name: str, use_hint: bool = False):
     os.makedirs(output_folder, exist_ok=True)
 
     model_basename = model_name.replace("/", "_")
-    csv_file = f"{output_folder}/{model_basename}_mbpp.csv"
-    json_file = f"{output_folder}/{model_basename}_mbpp.json"
+    suffix = "_with_hint" if use_hint else ""
+    csv_file = f"{output_folder}/{model_basename}_mbpp{suffix}.csv"
+    json_file = f"{output_folder}/{model_basename}_mbpp{suffix}.json"
 
     with open(json_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
@@ -441,6 +547,8 @@ def save_results_mbpp(results: List[Dict], output_folder: str, model_name: str):
             csv_results.append(csv_row)
 
         fieldnames = ["task_id", "text", "completion", "raw_completion", "code", "test_list", "test_setup_code"]
+        if use_hint:
+            fieldnames.append("hint")
         with open(csv_file, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
@@ -479,11 +587,28 @@ if __name__ == "__main__":
         choices=["full", "sanitized"],
         help="Dataset version (MBPP only)"
     )
+    parser.add_argument(
+        "--use_hint",
+        action="store_true",
+        help="Use hints for generation. Requires --hint_file to be specified."
+    )
+    parser.add_argument(
+        "--hint_file",
+        type=str,
+        default=None,
+        help="Path to JSON file containing hints (output from generate_hints.py)"
+    )
 
     args = parser.parse_args()
 
+    # Validate hint arguments
+    if args.use_hint and not args.hint_file:
+        parser.error("--use_hint requires --hint_file to be specified")
+
     console.print(f"\n=== VLLM Evaluation ({args.data.upper()}) ===")
     console.print(f"Model: {args.model_name}")
+    if args.use_hint:
+        console.print(f"[green]Using hints from: {args.hint_file}[/green]")
 
     try:
         model_config = {
@@ -504,19 +629,24 @@ if __name__ == "__main__":
             max_tokens=params["max_tokens"],
         )
 
+        # Load hints if specified
+        hints_map = None
+        if args.use_hint:
+            hints_map = load_hints(args.hint_file)
+
         if args.data == "humaneval":
             dataset_name = "openai/openai_humaneval"
-            data = load_data_humaneval(dataset_name, num_workers=args.num_workers)
+            data = load_data_humaneval(dataset_name, num_workers=args.num_workers, hints_map=hints_map)
             results = batch_inference_humaneval(model, data, args.batch_size, sampling_params)
-            save_results_humaneval(results, args.output_folder, args.model_name)
+            save_results_humaneval(results, args.output_folder, args.model_name, use_hint=args.use_hint)
         else:
             # Use local data path for MBPP
             # ROOT is src/evaluate, so we need to go up two levels to get to project root
             data_folder = os.path.join(os.path.dirname(os.path.dirname(ROOT)), "data")
             console.print(f"Using local data folder: {data_folder}")
-            data = load_data_mbpp(data_folder, version=args.version, num_workers=args.num_workers)
+            data = load_data_mbpp(data_folder, version=args.version, num_workers=args.num_workers, hints_map=hints_map)
             results = batch_inference_mbpp(model, data, args.batch_size, sampling_params)
-            save_results_mbpp(results, args.output_folder, args.model_name)
+            save_results_mbpp(results, args.output_folder, args.model_name, use_hint=args.use_hint)
 
         console.print(f"\n[green]✓ Evaluation completed successfully![/green]")
 
