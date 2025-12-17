@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  llm-evaluator:
+    build: .
+    container_name: llm-code-evaluator
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./results:/app/results
+      - ollama-data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+    stdin_open: true
+    tty: true
+
+volumes:
+  ollama-data:

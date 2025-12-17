@@ -1,0 +1,1418 @@
+{
+  "dataset": "HumanEval",
+  "total_samples": 164,
+  "hint_based": {
+    "correct": 94,
+    "total": 0,
+    "pass_rates": [
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "pseudocode_based": {
+    "correct": 98,
+    "total": 0,
+    "pass_rates": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "details": [
+    {
+      "task_id": "HumanEval/0",
+      "question": "from typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n  ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline for the given problem:\n\n```pseudocode\nfunction has_close_elements(numbers, threshold):\n    // Loop through each number in the list\n    for idx = 0 to length of numbe...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/1",
+      "question": "from typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \"\"\" Input t...",
+      "hint_approach": {
+        "hint": "Sure, here are some helpful hints to solve this problem:\n\n1. **Understand the Problem**: Make sure you understand what a balanced group of parentheses is and how they can be separated from each other....",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/2",
+      "question": "\n\ndef truncate_number(number: float) -> float:\n    \"\"\" Given a positive floating point number, it ca...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode that outlines the approach to solve the given problem:\n\n```pseudocode\nFUNCTION truncate_number(number: FLOAT) -> FLOAT\n    // The function takes a positive floating point nu...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/3",
+      "question": "from typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \"\"\" You're given a list...",
+      "hint_approach": {
+        "hint": "1. To solve this problem, you need to track the balance of a bank account as operations (deposits and withdrawals) are performed.\n2. The challenge is to determine if at any point during these transact...",
+        "pass_rate": 0.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode outlining the approach to solve the given problem:\n\n```pseudocode\nfunction below_zero(operations):\n    // Initialize the account's balance with zero.\n    set balance := 0\n    \n ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/4",
+      "question": "from typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \"\"\" For a ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/5",
+      "question": "from typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \"\"\" ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/6",
+      "question": "from typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \"\"\" Input to ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode outlining the solution approach to the given problem:\n\n```\nFUNCTION parse_nested_parens(paren_string: str):\n    result_list = []\n    \n    FOR EACH group IN paren_string SEPARATE...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/7",
+      "question": "from typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 0.0
+      }
+    },
+    {
+      "task_id": "HumanEval/8",
+      "question": "from typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \"\"\" For...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/9",
+      "question": "from typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \"\"\" From a gi...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solving the given problem:\n\n```\nFUNCTION rollingMax(numbers)\n    SET runningMax TO NULL\n    SET result TO EMPTY LIST\n\n    FOR EACH number IN number...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/10",
+      "question": "\n\ndef is_palindrome(string: str) -> bool:\n    \"\"\" Test if given string is a palindrome \"\"\"\n    retur...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/11",
+      "question": "from typing import List\n\n\ndef string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone towards solving this problem:\n\n1. **Understand XOR Operation**: Remember that binary XOR operation returns '0' when the corresponding bits of tw...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/12",
+      "question": "from typing import List, Optional\n\n\ndef longest(strings: List[str]) -> Optional[str]:\n    \"\"\" Out of...",
+      "hint_approach": {
+        "hint": "1. Start by checking if the input list is empty, as you should handle this edge case first.\n2. To find the longest string, iterate through the list and determine the maximum length of any string in th...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode outlining the solution approach for the given programming question:\n\n```\nFUNCTION longest(strings)\n    IF NOT (strings IS EMPTY)\n        MAXLEN \u2190 0\n        LONGEST_STRING \u2190 NULL...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/13",
+      "question": "\n\ndef greatest_common_divisor(a: int, b: int) -> int:\n    \"\"\" Return a greatest common divisor of tw...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/14",
+      "question": "from typing import List\n\n\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\" Return list of all pre...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to assist someone in solving this problem:\n\n1. Understand the function signature and what it is expected to do. The `all_prefixes` function should take a string as input an...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solve the given programming question:\n\n```\nFUNCTION all_prefixes(str)\n    // Initialize an empty list to store prefixes\n    result = []\n    \n    FO...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/15",
+      "question": "\n\ndef string_sequence(n: int) -> str:\n    \"\"\" Return a string containing space-delimited numbers sta...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve this programming question:\n\n1. Understand what the function is expected to do: It should generate a string containing space-delimited numbers starting f...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode based on the provided programming question and its correct answer:\n\n```\nFUNCTION string_sequence(n)\n    // Initialize an empty list to store numbers from 0 to n inclusive\n    nu...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/16",
+      "question": "\n\ndef count_distinct_characters(string: str) -> int:\n    \"\"\" Given a string, find out how many disti...",
+      "hint_approach": {
+        "hint": "1. To solve this problem, you need to focus on reducing the string to a format where all characters are in lowercase and duplicates are removed.\n2. The use of the `set()` function helps remove duplica...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline that explains the logic behind the function `count_distinct_characters`:\n\n```pseudocode\nfunction count_distinct_characters(input_string) :\n    // Convert all charact...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/17",
+      "question": "from typing import List\n\n\ndef parse_music(music_string: str) -> List[int]:\n    \"\"\" Input to this fun...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 0.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Certainly! Below is the pseudocode that outlines the solution approach for parsing a musical string into beats represented as integers:\n\n```pseudocode\nFUNCTION parse_music(music_string)\n    note_map =...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/18",
+      "question": "\n\ndef how_many_times(string: str, substring: str) -> int:\n    \"\"\" Find how many times a given substr...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve this problem:\n\n1. **Understand the Logic**: The core of your task is iterating through the string such that you can compare substrings, checking for mat...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode outlining the solution approach to solve the given programming question:\n\n```pseudocode\nFUNCTION how_many_times(string, substring)\n    DECLARE times = 0\n    \n    FOR i = 0 TO le...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/19",
+      "question": "from typing import List\n\n\ndef sort_numbers(numbers: str) -> str:\n    \"\"\" Input is a space-delimited ...",
+      "hint_approach": {
+        "hint": "1. The function needs to map string representations of numbers to their numeric values.\n2. You should convert the input string into a list, where each element is an individual number in its string for...",
+        "pass_rate": 0.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here's the pseudocode that outlines the approach to solving the given programming question:\n\n```pseudocode\nFUNCTION sort_numbers(numbers)\n    // Create a map of string values to numeric keys\n    value...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/20",
+      "question": "from typing import List, Tuple\n\n\ndef find_closest_elements(numbers: List[float]) -> Tuple[float, flo...",
+      "hint_approach": {
+        "hint": "1. Start by initializing two variables, `distance` and `closest_pair`, with `None`. This will help you keep track of the smallest distance found so far and the corresponding pair of numbers.\n2. Use ne...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Below is the pseudocode outlining the solution approach to find the two closest elements in a list of numbers:\n\n```\nFUNCTION find_closest_elements(numbers)\n    SET closest_pair TO NULL\n    SET distanc...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/21",
+      "question": "from typing import List\n\n\ndef rescale_to_unit(numbers: List[float]) -> List[float]:\n    \"\"\" Given li...",
+      "hint_approach": {
+        "hint": "1. To solve this problem, you need to identify the smallest and largest values in the list of numbers. This will allow you to calculate a transform that scales all other numbers appropriately.\n\n2. Con...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/22",
+      "question": "from typing import List, Any\n\n\ndef filter_integers(values: List[Any]) -> List[int]:\n    \"\"\" Filter g...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to assist someone in solving this programming question:\n\n1. **Understanding the Problem**: The function `filter_integers` is supposed to take a list of any value...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode that outlines the approach to solving the given programming question:\n\n```pseudocode\nFUNCTION filter_integers(values)\n    // Initialize an empty list to store integers\n    r...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/23",
+      "question": "\n\ndef strlen(string: str) -> int:\n    \"\"\" Return length of given string\n    >>> strlen('')\n    0\n   ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone towards solving this problem:\n\n1. **Understand the Functionality**: The `strlen` function is designed to take a string as input and return its l...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode for the `strlen` function based on the provided correct answer:\n\n```pseudocode\nFUNCTION strlen(string)\n    RETURN len(string)\nEND FUNCTION\n```\n\nIn this pseudocode, we define...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/24",
+      "question": "\n\ndef largest_divisor(n: int) -> int:\n    \"\"\" For a given number n, find the largest number that div...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/25",
+      "question": "from typing import List\n\n\ndef factorize(n: int) -> List[int]:\n    \"\"\" Return list of prime factors o...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solving the given problem:\n\n```\nFUNCTION factorize(n: INTEGER) -> LIST[INTEGER]\n    DECLARE fact AS LIST[INTEGER] = []\n    DECLARE i AS INTEGER = 2...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/26",
+      "question": "from typing import List\n\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\" From a lis...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to assist someone in solving this problem:\n\n1. The task requires filtering out elements from a list based on their frequency, keeping only those that occur once.\n2. You can...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/27",
+      "question": "\n\ndef flip_case(string: str) -> str:\n    \"\"\" For a given string, flip lowercase characters to upperc...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/28",
+      "question": "from typing import List\n\n\ndef concatenate(strings: List[str]) -> str:\n    \"\"\" Concatenate list of st...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve the given programming question:\n\n1. The function `concatenate` takes a list of strings as an argument and should return a single concatenated string.\n2....",
+        "pass_rate": 0.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solve the given programming question:\n\n```\nFUNCTION concatenate(strings: List[str]) -> str:\n    DECLARE result AS str = \"\"\n    FOR EACH string IN s...",
+        "pass_rate": 0.0
+      }
+    },
+    {
+      "task_id": "HumanEval/29",
+      "question": "from typing import List\n\n\ndef filter_by_prefix(strings: List[str], prefix: str) -> List[str]:\n    \"\"...",
+      "hint_approach": {
+        "hint": "1. Start by understanding what the function `filter_by_prefix` is supposed to do - it should return a new list containing only those elements from the input list that start with the specified prefix.\n...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/30",
+      "question": "\n\ndef get_positive(l: list):\n    \"\"\"Return only positive numbers in the list.\n    >>> get_positive([...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/31",
+      "question": "\n\ndef is_prime(n):\n    \"\"\"Return true if a given number is prime, and false otherwise.\n    >>> is_pr...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode for the given function `is_prime(n)`:\n\n```pseudocode\nFUNCTION is_prime(n)\n    // Base case: numbers less than 2 are not prime\n    IF n < 2 THEN \n        RETURN False\n    \n    //...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/32",
+      "question": "import math\n\n\ndef poly(xs: list, x: float):\n    \"\"\"\n    Evaluates polynomial with coefficients xs at...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/33",
+      "question": "\n\ndef sort_third(l: list):\n    \"\"\"This function takes a list l and returns a list l' such that\n    l...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/34",
+      "question": "\n\ndef unique(l: list):\n    \"\"\"Return sorted unique elements in a list\n    >>> unique([5, 3, 5, 2, 3,...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve this problem:\n\n1. To get unique elements from a list, you can use Python's `set` which automatically removes duplicates.\n2. After removing duplicates by...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a pseudocode outline that captures the logic needed to solve the given programming problem:\n\n```pseudocode\nFUNCTION unique(list l)\n    // Remove duplicates from list l by converting it into a ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/35",
+      "question": "\n\ndef max_element(l: list):\n    \"\"\"Return maximum element in the list.\n    >>> max_element([1, 2, 3]...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/36",
+      "question": "\n\ndef fizz_buzz(n: int):\n    \"\"\"Return the number of times the digit 7 appears in integers less than...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/37",
+      "question": "\n\ndef sort_even(l: list):\n    \"\"\"This function takes a list l and returns a list l' such that\n    l'...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/38",
+      "question": "\n\ndef encode_cyclic(s: str):\n    \"\"\"\n    returns encoded string by cycling groups of three character...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/39",
+      "question": "\n\ndef prime_fib(n: int):\n    \"\"\"\n    prime_fib returns n-th number that is a Fibonacci number and it...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/40",
+      "question": "\n\ndef triples_sum_to_zero(l: list):\n    \"\"\"\n    triples_sum_to_zero takes a list of integers as an i...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline that describes how to solve the problem:\n\n```pseudocode\nFUNCTION triples_sum_to_zero(l)\n    FOR i = 0 TO length of l - 1\n        FOR j = i + 1 TO length of l - 1\n   ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/41",
+      "question": "\n\ndef car_race_collision(n: int):\n    \"\"\"\n    Imagine a road that's a perfectly straight infinitely ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone toward solving this programming question:\n\n1. **Understanding the Problem**: Think about how you would simulate a car collision scenario. Notice...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/42",
+      "question": "\n\ndef incr_list(l: list):\n    \"\"\"Return list with elements incremented by 1.\n    >>> incr_list([1, 2...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to assist someone in solving this programming question:\n\n1. The function `incr_list` is supposed to take a list as input and return a new list where each element of the inp...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here's a clear pseudocode outline that represents the given Python function `incr_list`:\n\n```pseudocode\nFUNCTION incr_list(list L)\n    new_list = []\n    FOR each element e IN list L\n        append (e ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/43",
+      "question": "\n\ndef pairs_sum_to_zero(l):\n    \"\"\"\n    pairs_sum_to_zero takes a list of integers as an input.\n    ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone towards solving this problem:\n\n1. **Understand Edge Cases**: Pay attention to edge cases such as empty lists, lists with a single element, and l...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a step-by-step pseudocode outline that aligns with the given Python function:\n\n```pseudocode\nfunction pairsSumToZero(list of integers l):\n    for i as integer from 0 to length(l) - 1:\n        ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/44",
+      "question": "\n\ndef change_base(x: int, base: int):\n    \"\"\"Change numerical base of input number x to base.\n    re...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve this programming question:\n\n1. Understand the logic behind converting a number from one base to another. It involves repeatedly dividing the number by t...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solve the problem described in the question:\n\n```pseudocode\nFUNCTION change_base(x, base)\n    // Initialize an empty string 'ret' to store the resu...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/45",
+      "question": "\n\ndef triangle_area(a, h):\n    \"\"\"Given length of a side and high return area for a triangle.\n    >>...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve this problem:\n\n1. The formula for calculating the area of a triangle is \\( \\text{Area} = \\frac{1}{2} \\times \\text{base} \\times \\text{height} \\). In your...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline for the provided programming question:\n\n```pseudocode\nFUNCTION triangle_area(a, h):\n    // Calculate the area of a triangle using the formula (base * height) / 2\n   ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/46",
+      "question": "\n\ndef fib4(n: int):\n    \"\"\"The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solving the given problem efficiently:\n\n```\nFUNCTION fib4(n)\n   IF n < 4 THEN\n      RETURN [0, 0, 2, 0][n] // This assumes array indexing from 0, a...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/47",
+      "question": "\n\ndef median(l: list):\n    \"\"\"Return median of elements in the list l.\n    >>> median([3, 1, 2, 4, 5...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone toward solving this problem:\n\n1. **Understand What a Median Is**: Recall that the median of a list is the middle number when the numbers are arr...",
+        "pass_rate": 0.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a step-by-step pseudocode that outlines the approach to solve the given problem of finding the median of elements in a list:\n\n```pseudocode\nFUNCTION median(l)\n    // Sort the list l in ascendi...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/48",
+      "question": "\n\ndef is_palindrome(text: str):\n    \"\"\"\n    Checks if given string is a palindrome\n    >>> is_palind...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to guide someone towards solving this problem:\n\n1. **Understand the Problem**: The function `is_palindrome` needs to check if a given string is equal to its reverse. For in...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Certainly! Here's the pseudocode that outlines the approach to solve the given problem:\n\n```\nFUNCTION is_palindrome(TEXT as STRING)\n    SET index := 0\n\n    REPEAT\n        IF TEXT[index] IS NOT EQUAL T...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/49",
+      "question": "\n\ndef modp(n: int, p: int):\n    \"\"\"Return 2^n modulo p (be aware of numerics).\n    >>> modp(3, 5)\n  ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve the given programming question:\n\n1. Understand what the function `modp` is supposed to do: It calculates \\(2^n\\) modulo \\(p\\). Start by ensuring you can...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline for solving the problem described:\n\n```pseudocode\nFUNCTION modp(n, p)\n    // Initialize result to 1 because any number to the power of 0 is 1\n    ret = 1\n    \n    //...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/50",
+      "question": "\n\ndef encode_shift(s: str):\n    \"\"\"\n    returns encoded string by shifting every character by 5 in t...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone through solving this problem:\n\n1. **Understand the Encoding Logic**: In the `encode_shift` function, every character is shifted by 5 positions f...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/51",
+      "question": "\n\ndef remove_vowels(text):\n    \"\"\"\n    remove_vowels is a function that takes string and returns str...",
+      "hint_approach": {
+        "hint": "1. When dealing with this problem, think about how you might iterate through each character of the string and filter out those characters based on your condition.\n2. Consider using a list comprehensio...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline that follows the logic of the given Python function `remove_vowels`:\n\n```\nFUNCTION remove_vowels(text)\n    vowels = ['a', 'e', 'i', 'o', 'u']  // Define list of vowe...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/52",
+      "question": "\n\ndef below_threshold(l: list, t: int):\n    \"\"\"Return True if all numbers in the list l are below th...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to solve this programming question:\n\n1. You need to iterate through each element of the list `l` and compare it with the threshold value `t`. If you find any element that i...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Certainly! Below is a clear pseudocode that outlines the approach to solve the given programming question:\n\n```pseudocode\nFUNCTION below_threshold(l, t)\n    FOR EACH element e IN list l DO\n        IF ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/53",
+      "question": "\n\ndef add(x: int, y: int):\n    \"\"\"Add two numbers x and y\n    >>> add(2, 3)\n    5\n    >>> add(5, 7)\n...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to solve this programming question:\n\n1. Start by understanding what the function `add` is supposed to do. It takes two integer parameters, adds them together, an...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outlining the approach to solve the given problem:\n\n```pseudocode\nFUNCTION add(x: INTEGER, y: INTEGER):\n    // Add two numbers x and y together using the '+' operator and re...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/54",
+      "question": "\n\ndef same_chars(s0: str, s1: str):\n    \"\"\"\n    Check if two words have the same characters.\n    >>>...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/55",
+      "question": "\n\ndef fib(n: int):\n    \"\"\"Return n-th Fibonacci number.\n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solving the given problem:\n\n```pseudocode\nfunction fibonacci(n):\n    // Base case: if n equals 0, return 0.\n    if n == 0:\n        return 0\n    \n  ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/56",
+      "question": "\n\ndef correct_bracketing(brackets: str):\n    \"\"\" brackets is a string of \"<\" and \">\".\n    return Tru...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/57",
+      "question": "\n\ndef monotonic(l: list):\n    \"\"\"Return True is list elements are monotonically increasing or decrea...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to assist someone in solving this programming question:\n\n1. **Understand the Problem**: The function `monotonic` should determine if a list's elements are monoto...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/58",
+      "question": "\n\ndef common(l1: list, l2: list):\n    \"\"\"Return sorted unique common elements for two lists.\n    >>>...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solving the problem:\n\n```\nFUNCTION common(l1, l2):\n    DECLARE ret AS SET\n    FOR EACH element e1 IN l1:\n        FOR EACH element e2 IN l2:\n       ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/59",
+      "question": "\n\ndef largest_prime_factor(n: int):\n    \"\"\"Return the largest prime factor of n. Assume n > 1 and is...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/60",
+      "question": "\n\ndef sum_to_n(n: int):\n    \"\"\"sum_to_n is a function that sums numbers from 1 to n.\n    >>> sum_to_...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to assist someone in solving this problem:\n\n1. **Understand the Requirement**: The function `sum_to_n` should calculate and return the sum of all integers from 1...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/61",
+      "question": "\n\ndef correct_bracketing(brackets: str):\n    \"\"\" brackets is a string of \"(\" and \")\".\n    return Tru...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline of the solution approach based on the provided correct answer:\n\n```pseudocode\nFUNCTION correct_bracketing(brackets: STRING)\n    depth = 0\n    \n    FOR EACH character...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/62",
+      "question": "\n\ndef derivative(xs: list):\n    \"\"\" xs represent coefficients of a polynomial.\n    xs[0] + xs[1] * x...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to assist someone in solving this problem:\n\n1. Understand what the derivative of a polynomial function is.\n2. Recognize that when you differentiate a term \\( ax^n \\) with r...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Certainly! Below is a clear pseudocode that outlines the approach to solving the given problem of finding the derivative of a polynomial represented by its coefficients.\n\n```pseudocode\nFUNCTION deriva...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/63",
+      "question": "\n\ndef fibfib(n: int):\n    \"\"\"The FibFib number sequence is a sequence similar to the Fibbonacci sequ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to assist someone in solving this problem:\n\n1. **Understand the Base Cases**: The base cases of the function (`n == 0` and `n == 1`) can be identified directly f...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode for solving the given problem:\n\n```pseudocode\nfunction fibfib(n):\n    // Base cases\n    if n == 0:\n        return 0\n    if n == 1:\n        return 0\n    if n == 2:\n        return...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/64",
+      "question": "\nFIX = \"\"\"\nAdd more test cases.\n\"\"\"\n\ndef vowels_count(s):\n    \"\"\"Write a function vowels_count which...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 0.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/65",
+      "question": "\ndef circular_shift(x, shift):\n    \"\"\"Circular shift the digits of the integer x, shift the digits r...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/66",
+      "question": "\ndef digitSum(s):\n    \"\"\"Task\n    Write a function that takes a string as input and returns the sum ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline that outlines the approach to solving the given programming question:\n\n```pseudocode\nfunction digitSum(s):\n    // Initialize the sum variable to hold the ASCII value...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/67",
+      "question": "\ndef fruit_distribution(s,n):\n    \"\"\"\n    In this task, you will be given a string that represents a...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outlining the approach to solving the given problem:\n\n```\nFUNCTION fruit_distribution(s, n)\n   // Initialize an empty list\n   DECLARE lis AS LIST\n   \n   // Iterate over each...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/68",
+      "question": "\ndef pluck(arr):\n    \"\"\"\n    \"Given an array representing a branch of a tree that has non-negative i...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines a step-by-step approach to solving the problem described in the question:\n\n```pseudocode\nFUNCTION pluck(arr):\n    // If the input array is empty, return an empty l...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/69",
+      "question": "\ndef search(lst):\n    '''\n    You are given a non-empty list of positive integers. Return the greate...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/70",
+      "question": "\ndef strange_sort_list(lst):\n    '''\n    Given list of integers, return list in strange order.\n    S...",
+      "hint_approach": {
+        "hint": "Sure! Here are some helpful hints to guide someone towards solving this problem:\n\n1. **Understand the Logic**: The question asks for a \"strange\" sorting order, which starts with the smallest number an...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outlining the solution approach based on the given question and its correct answer:\n\n```\nfunction strange_sort_list(lst)\n    // Initialize an empty list to store the result\n...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/71",
+      "question": "\ndef triangle_area(a, b, c):\n    '''\n    Given the lengths of the three sides of a triangle. Return ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/72",
+      "question": "\ndef will_it_fly(q,w):\n    '''\n    Write a function that returns True if the object q will fly, and ...",
+      "hint_approach": {
+        "hint": "Sure! Here are some helpful hints to assist someone in solving this problem:\n\n1. **Understand the Problem**: Make sure you fully understand what a balanced object is (a palindromic list) and how the s...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the solution approach for the given programming question:\n\n```\nFUNCTION will_it_fly(q, w)\n    IF sum of elements in q > w THEN\n        RETURN False\n    ELSE\n      ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/73",
+      "question": "\ndef smallest_change(arr):\n    \"\"\"\n    Given an array arr of integers, find the minimum number of el...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone through solving this programming question:\n\n1. **Understand the Problem**: Make sure you understand what a palindromic array is and how to ident...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode outlining the approach to solving the problem:\n\n```pseudocode\nfunction smallest_change(arr):\n    // Initialize count of needed changes to zero\n    set changes_needed = 0\n    \n  ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/74",
+      "question": "\ndef total_match(lst1, lst2):\n    '''\n    Write a function that accepts two lists of strings and ret...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to assist someone in solving this problem:\n\n1. **Understand the logic of comparison**: The function should compare the total number of characters in each list an...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline for the given problem:\n\n```pseudocode\nfunction total_match(lst1, lst2):\n    // Initialize lengths of both lists to zero\n    l1_length = 0\n    l2_length = 0\n    \n    ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/75",
+      "question": "\ndef is_multiply_prime(a):\n    \"\"\"Write a function that returns true if the given number is the mult...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here's the pseudocode outline that follows the logic of the provided correct answer:\n\n```pseudocode\nfunction is_multiply_prime(a)\n    // Helper function to check if a number is prime or not.\n    funct...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/76",
+      "question": "\ndef is_simple_power(x, n):\n    \"\"\"Your task is to write a function that returns true if a number x ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a step-by-step pseudocode outline based on the given question and correct answer:\n\n```\nFUNCTION is_simple_power(x, n)\n    IF (n == 1):\n        RETURN (x == 1)\n\n    power = 1\n    WHILE (power <...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/77",
+      "question": "\ndef iscube(a):\n    '''\n    Write a function that takes an integer a and returns True \n    if this i...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here's the pseudocode for the given programming question:\n\n```pseudocode\nFUNCTION iscube(a):\n    // Ensure that 'a' is non-negative to calculate cube root accurately\n    a = ABSOLUTE(a)\n    \n    // Ca...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/78",
+      "question": "\ndef hex_key(num):\n    \"\"\"You have been tasked to write a function that receives \n    a hexadecimal ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to guide someone through solving this programming question:\n\n1. **Understand the Problem**: Make sure you understand what a hexadecimal number is and how the dig...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the solution approach for the given problem:\n\n```\nFUNCTION hex_key(hex_num)\n    // Define list of prime hexadecimal digits \n    PRIMES = ('2', '3', '5', '7', 'B', ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/79",
+      "question": "\ndef decimal_to_binary(decimal):\n    \"\"\"You will be given a number in decimal form and your task is ...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to assist someone in solving this problem:\n\n1. **Understand Binary Representation**: Recall how numbers convert to binary. Each decimal number can be broken down into a seq...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solve the problem:\n\n```pseudocode\nFUNCTION decimal_to_binary(decimal)\n    // Convert the given decimal number to binary using Python's built-in bin...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/80",
+      "question": "\ndef is_happy(s):\n    \"\"\"You are given a string s.\n    Your task is to check if the string is happy ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/81",
+      "question": "\ndef numerical_letter_grade(grades):\n    \"\"\"It is the last week of the semester and the teacher has ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/82",
+      "question": "\ndef prime_length(string):\n    \"\"\"Write a function that takes a string and returns True if the strin...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/83",
+      "question": "\ndef starts_one_ends(n):\n    \"\"\"\n    Given a positive integer n, return the count of the numbers of ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/84",
+      "question": "\ndef solve(N):\n    \"\"\"Given a positive integer N, return the total sum of its digits in binary.\n    ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/85",
+      "question": "\ndef add(lst):\n    \"\"\"Given a non-empty list of integers lst. add the even elements that are at odd ...",
+      "hint_approach": {
+        "hint": "Sure! Here are some helpful hints to assist someone in solving this problem:\n\n1. Understand the task requires you to sum even numbers at odd indices (indices starting from 1, as Python uses zero-based...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a step-by-step Pseudocode outlining how to solve the given problem:\n\n```pseudocode\nfunction add(lst):\n    // Initialize sum variable to keep track of the total\n    var sum = 0\n\n    // Loop thr...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/86",
+      "question": "\ndef anti_shuffle(s):\n    \"\"\"\n    Write a function that takes a string and returns an ordered versio...",
+      "hint_approach": {
+        "hint": "1. To solve this problem, you need to understand how string manipulation and sorting functions work together.\n2. Consider splitting the input string into individual words, which can be done using the ...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/87",
+      "question": "\ndef get_row(lst, x):\n    \"\"\"\n    You are given a 2 dimensional data, as a nested lists,\n    which i...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/88",
+      "question": "\ndef sort_array(array):\n    \"\"\"\n    Given an array of non-negative integers, return a copy of the gi...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to solve this programming question:\n\n1. Understand the conditions under which you need to sort in ascending or descending order.\n   - The array should be sorted in ascendin...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode based on the provided programming question and its correct answer:\n\n```pseudocode\nfunction sort_array(array)\n    if length of array equals zero\n        return empty list\n    els...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/89",
+      "question": "\ndef encrypt(s):\n    \"\"\"Create a function encrypt that takes a string as an argument and\n    returns...",
+      "hint_approach": {
+        "hint": "1. To solve this problem, you'll need to understand how the string is being shifted and remember a key fact about the alphabet - there are 26 letters in the English alphabet.\n2. The function `encrypt`...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the solution approach for the given encryption function:\n\n```pseudocode\nFUNCTION encrypt(s)\n    d = \"abcdefghijklmnopqrstuvwxyz\" // The alphabet\n    out = \"\" // Th...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/90",
+      "question": "\ndef next_smallest(lst):\n    \"\"\"\n    You are given a list of integers.\n    Write a function next_sma...",
+      "hint_approach": {
+        "hint": "Sure! Here are some helpful hints to assist someone in solving this problem:\n\n1. **Understand Requirements**: First, ensure you fully understand what needs to be returned by the function. The goal is ...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline of the approach to solve the given problem:\n\n```\nFUNCTION next_smallest(lst):\n    // Remove duplicates and sort the list in ascending order\n    SET unique_sorted_lst...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/91",
+      "question": "\ndef is_bored(S):\n    \"\"\"\n    You'll be given a string of words, and your task is to count the numbe...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/92",
+      "question": "\ndef any_int(x, y, z):\n    '''\n    Create a function that takes 3 numbers.\n    Returns true if one o...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Certainly! Below is a clear pseudocode that outlines the approach to solving the problem described in the question:\n\n```pseudocode\nfunction any_int(x, y, z):\n    // Check if all inputs are integers.\n ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/93",
+      "question": "\ndef encode(message):\n    \"\"\"\n    Write a function that takes a message, and encodes in such a \n    ...",
+      "hint_approach": {
+        "hint": "1. To solve this problem, you need to first handle swapping the case of each letter in the message. You can use Python's built-in `swapcase()` method or manually implement this logic.\n2. Next, identif...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is the pseudocode that outlines the approach to solving the given problem:\n\n```\nFUNCTION encode(message)\n    // Initialize a dictionary to hold the replaced vowels\n    SET vowels = \"aeiouAEIOU\"\n ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/94",
+      "question": "\n\ndef skjkasdkd(lst):\n    \"\"\"You are given a list of integers.\n    You need to find the largest prim...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/95",
+      "question": "\ndef check_dict_case(dict):\n    \"\"\"\n    Given a dictionary, return True if all keys are strings in l...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/96",
+      "question": "\ndef count_up_to(n):\n    \"\"\"Implement a function that takes an non-negative integer and returns an a...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here's a clear pseudocode outline for the given programming question:\n\n```pseudocode\nFUNCTION count_up_to(n):\n    // Initialize an empty list to store prime numbers\n    SET primes = []\n\n    // Loop th...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/97",
+      "question": "\ndef multiply(a, b):\n    \"\"\"Complete the function that takes two integers and returns \n    the produ...",
+      "hint_approach": {
+        "hint": "Certainly! Here are some helpful hints to assist someone in solving this programming question:\n\n1. **Understand the Problem**: The task is to find the product of the unit digits (last digit) of two in...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "Here is a clear pseudocode outline that captures the logic to solve the problem as specified:\n\n```\nFUNCTION multiply(a, b)\n    // Calculate and store unit digits of both inputs using modulo operation ...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/98",
+      "question": "\ndef count_upper(s):\n    \"\"\"\n    Given a string s, count the number of uppercase vowels in even indi...",
+      "hint_approach": {
+        "hint": "Here are some helpful hints to solve this problem:\n\n1. Start by iterating through the string, focusing on even indices (positions) where you want to check for uppercase vowels.\n2. You can use a loop w...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    },
+    {
+      "task_id": "HumanEval/99",
+      "question": "\ndef closest_integer(value):\n    '''\n    Create a function that takes a value (string) representing ...",
+      "hint_approach": {
+        "hint": "...",
+        "pass_rate": 1.0
+      },
+      "pseudocode_approach": {
+        "pseudocode": "...",
+        "pass_rate": 1.0
+      }
+    }
+  ]
+}
