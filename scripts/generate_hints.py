@@ -7,14 +7,17 @@ The teacher sees both the question and the solution, then generates a hint
 that would help a student solve the problem.
 
 Usage:
+    # For instruct models (uses chat format)
     python scripts/generate_hints.py --model_name Qwen/Qwen2.5-3B-Instruct --dataset humaneval
-    python scripts/generate_hints.py --model_name Qwen/Qwen2.5-3B-Instruct --dataset mbpp
+
+    # For RL-trained models (uses raw prompt format matching training)
+    python scripts/generate_hints.py --model_name path/to/rlt_model --dataset humaneval --use_raw_prompt
 """
 
 import argparse
 import json
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from vllm import LLM, SamplingParams
 from datasets import load_dataset
@@ -24,12 +27,10 @@ from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn
 console = Console()
 
 
-def get_hint_prompt(question: str, solution: str) -> List[Dict[str, str]]:
+def get_hint_prompt_chat(question: str, solution: str) -> List[Dict[str, str]]:
     """
-    Create the prompt for hint generation.
-
-    The teacher sees both the question and solution, and must generate
-    a helpful hint that guides toward the solution without giving it away.
+    Create the prompt for hint generation using chat format.
+    Use this for instruct-tuned models.
     """
     messages = [
         {
@@ -60,6 +61,28 @@ Do NOT include any code in your hint. Focus on the conceptual approach."""
         }
     ]
     return messages
+
+
+def get_hint_prompt_raw(question: str, solution: str) -> str:
+    """
+    Create a raw prompt for hint generation.
+    Use this for RL-trained models that were trained with this specific format.
+    This EXACTLY matches the format used during RLT training in prepare_apps.py.
+    """
+    prompt = f"""Given the question and answer, generate a helpful hint.
+
+<question>
+{question}
+</question>
+
+<answer>
+{solution}
+</answer>
+
+Generate a hint that helps solve this problem without giving away the solution.
+
+<hint>"""
+    return prompt
 
 
 def extract_hint(response: str) -> str:
@@ -143,13 +166,24 @@ def generate_hints(
     model: LLM,
     items: List[Dict],
     sampling_params: SamplingParams,
-    batch_size: int = 16
+    batch_size: int = 16,
+    use_raw_prompt: bool = False
 ) -> List[Dict]:
-    """Generate hints for all items using batch inference."""
+    """Generate hints for all items using batch inference.
+
+    Args:
+        model: The vLLM model
+        items: List of problem items
+        sampling_params: Sampling parameters
+        batch_size: Batch size for inference
+        use_raw_prompt: If True, use raw text prompts (for RL-trained models).
+                       If False, use chat format (for instruct models).
+    """
     results = []
     total = len(items)
 
-    console.print(f"Generating hints for {total} problems (batch_size={batch_size})")
+    mode_str = "raw prompt" if use_raw_prompt else "chat format"
+    console.print(f"Generating hints for {total} problems (batch_size={batch_size}, mode={mode_str})")
 
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -162,16 +196,28 @@ def generate_hints(
 
         for i in range(0, total, batch_size):
             batch_items = items[i:i + batch_size]
-            batch_messages = [
-                get_hint_prompt(item["question"], item["solution"])
-                for item in batch_items
-            ]
 
             try:
-                outputs = model.chat(
-                    messages=batch_messages,
-                    sampling_params=sampling_params,
-                )
+                if use_raw_prompt:
+                    # Use raw prompts for RL-trained models
+                    batch_prompts = [
+                        get_hint_prompt_raw(item["question"], item["solution"])
+                        for item in batch_items
+                    ]
+                    outputs = model.generate(
+                        prompts=batch_prompts,
+                        sampling_params=sampling_params,
+                    )
+                else:
+                    # Use chat format for instruct models
+                    batch_messages = [
+                        get_hint_prompt_chat(item["question"], item["solution"])
+                        for item in batch_items
+                    ]
+                    outputs = model.chat(
+                        messages=batch_messages,
+                        sampling_params=sampling_params,
+                    )
 
                 for item, output in zip(batch_items, outputs):
                     raw_hint = output.outputs[0].text
@@ -199,6 +245,8 @@ def generate_hints(
 
             except Exception as e:
                 console.print(f"[red]Error in batch {i//batch_size + 1}: {e}[/red]")
+                import traceback
+                traceback.print_exc()
                 for item in batch_items:
                     results.append({
                         "task_id": item["task_id"],
@@ -294,12 +342,19 @@ def main():
         default=0.9,
         help="GPU memory utilization (0.0 to 1.0)"
     )
+    parser.add_argument(
+        "--use_raw_prompt",
+        action="store_true",
+        help="Use raw text prompts instead of chat format. Use this for RL-trained models."
+    )
 
     args = parser.parse_args()
 
     console.print("\n=== Hint Generation with vLLM ===")
     console.print(f"Model: {args.model_name}")
     console.print(f"Dataset: {args.dataset}")
+    if args.use_raw_prompt:
+        console.print("[yellow]Using raw prompt mode (for RL-trained models)[/yellow]")
 
     # Initialize model
     console.print("\nInitializing model...")
@@ -326,7 +381,7 @@ def main():
         items = load_mbpp(args.mbpp_data_path, args.mbpp_version)
 
     # Generate hints
-    results = generate_hints(model, items, sampling_params, args.batch_size)
+    results = generate_hints(model, items, sampling_params, args.batch_size, args.use_raw_prompt)
 
     # Save results
     model_basename = args.model_name.replace("/", "_")
